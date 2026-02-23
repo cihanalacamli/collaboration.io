@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Cisco Collaboration Replacement/Renewal Guidance Tool</title>
+
+  <style>
+    :root{
+  /* Page + card */
+  --bg:#e6ecf4;          /* daha koyu blue-gray (şu an fazla beyaz) */
+  --card:#f3f6fb;        /* kart beyaz değil, hafif kırık beyaz */
+
+  /* Text */
+  --ink:#0f172a;         /* daha tok koyu yazı */
+  --muted:#2c3036;       /* muted gerçekten muted */
+
+  /* Accents */
+  --accent:#0057b8;      /* daha tok mavi */
+  --accent2:#00408a;     /* hover/secondary */
+
+  /* Lines + chips */
+  --line:#cfd8e3;        /* border daha görünür */
+  --chip:#e7eef8;        /* pill background daha tok */
+
+--good:#16a34a; 
+--warn:#f59e0b; 
+--bad:#211f1f;
+
+}
+    
+*{box-sizing:border-box}
+    body
+{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg, #e6ecf4 0%, #dfe7f2 100%);
+      color:var(--ink);
+    }
+
+  button:disabled
+{
+  opacity:.45;
+  cursor:not-allowed;
+}
+    .wrap{
+      max-width:1150px;
+      margin:0 auto;
+      padding:28px 18px 60px;
+    }
+    .topbar{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .title h1{
+      margin:0;
+      font-size:22px;
+      color:var(--accent);
+      letter-spacing:.2px;
+    }
+    .title .sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+    .pillrow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-top:2px;
+    }
+    .pill{
+      border:1px solid #c7d3e1;
+      background:var(--chip);
+      color:var(--accent);
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:0 10px 28px rgba(15,23,42,0.08);
+      border-radius:10px;
+      
+      padding:10px;
+    }
+    .card h2{
+      margin:0 0 10px 0;
+      font-size:16px;
+      color:#123a58;
+    }
+    .card h3{
+      margin:14px 0 8px 0;
+      font-size:14px;
+      color:#123a58;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:end;
+    }
+.launch-badge {
+  margin-left: 0px;
+  display:inline-block;
+  margin-bottom:20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  color: #0b1320;
+  background: linear-gradient(90deg,#38bdf8,#22c55e);
+  vertical-align: middle;
+}
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:block;
+      margin-bottom:6px;
+    }
+    input, select, textarea, button{
+      font-family:inherit;
+      font-size:14px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding:10px 10px;
+      border:1px solid #d8e2ec;
+      border-radius:8px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color:#8dc3ff;
+      box-shadow:0 0 0 3px rgba(141,195,255,0.25);
+    }
+    textarea{
+  min-height:88px;
+  max-height:180px;   /* limit */
+  resize:vertical;
+}
+    .field{
+      flex:1;
+      min-width:220px;
+    }
+    .field.sm{min-width:140px; max-width:160px;}
+    .field.md{min-width:200px; max-width:240px;}
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    button{
+      border:0;
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.1px;
+    }
+   .btn-primary{
+  background:#0066cc;
+  color:#fff;
+}
+.btn-primary:hover{
+  background:#004ea8;
+}
+    .btn-ghost{
+      background:#f0f6fb;
+      color:var(--accent);
+      border:1px solid #d7e8ff;
+      font-weight:700;
+    }
+    .btn-danger{
+      background:#ed5345;
+      color:var(--bad);
+      border:1px solid #ffd0cc;
+    }
+.btn-danger:hover{background:#d42f20;
+}
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+      margin-top:8px;
+    }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:10px 0 0;
+    }
+    .tab{
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      color:var(--muted);
+      cursor:pointer;
+      user-select:none;
+      font-size:12px;
+      font-weight:700;
+    }
+    .tab.active{
+  border-color:#0066cc;
+  background:#e8f1fb;
+  color:#0066cc;
+}
+
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:13px;
+    }
+    .table th, .table td{
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+      vertical-align:top;
+    }
+    .table th{
+      text-align:left;
+      color:#123a58;
+      font-size:12px;
+      letter-spacing:.2px;
+    }
+.table-scroll{
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.output-scroll{
+  max-height: 360px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+}
+
+
+    .muted{color:var(--muted)}
+    .chip{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#f0f6fb;
+      border:1px solid var(--line);
+      color:#123a58;
+      font-size:11px;
+      font-weight:800;
+      margin-right:6px;
+      margin-top:4px;
+      white-space:nowrap;
+    }
+    .chip.good{border-color:#bfe8cc; background:#ecfff2; color:var(--good)}
+    .chip.warn{border-color:#ffe0b3; background:#fff7ea; color:var(--warn)}
+    .chip.bad{border-color:#ffcbc6; background:#fff1ef; color:var(--bad)}
+    .hr{height:1px; background:var(--line); margin:14px 0;}
+
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    .kbox{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      background:#fff;
+    }
+    .kbox .k{
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:4px;
+      font-weight:700;
+    }
+    .kbox .v{
+      font-size:18px;
+      font-weight:900;
+      color:#123a58;
+    }
+    .footnote{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:10px;
+      line-height:1.45;
+    }
+    .two-col{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media(max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .pillrow{justify-content:flex-start}
+      .kpi{grid-template-columns:1fr}
+      .two-col{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="title">
+      <h1>Cisco Collaboration Replacement Guidance Tool</h1>
+      <div class="sub">
+	<strong>• <span class="last-updated">Last updated: 23 Feb 2026</span></strong>
+  • <i>
+  Developed by
+  <a href="https://www.linkedin.com/in/calacamli" target="_blank" rel="noopener noreferrer" class="author-link">
+    Cihan Alaçamlı
+  </a>
+</i>
+      </div>
+    </div>
+    <div class="pillrow">
+      <div class="pill">V2.0 • Guide Mode</div>
+      <div class="pill">Unofficial tool</div>
+      
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- LEFT: INPUT + ADD -->
+    <div class="card">
+      <h2>1) User Input</h2>
+
+      <div class="tabs" id="tabs"></div>
+
+      <div class="row" style="margin-top:10px;">
+        <div class="field">
+          <label>Search (in prod family/series)</label>
+          <input id="searchBox" type="text" placeholder="E.g: 7900, SX, MX, DX, Board, License..." />
+        </div>
+        <div class="field md">
+          <label>Current Product / License</label>
+          <select id="legacySelect"></select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" onclick="addItem()">Add to Converter</button>
+        <button class="btn-danger" onclick="clearAll()">Reset ALL</button>
+      </div>
+
+      <div class="mini" id="hint"></div>
+
+      <div class="hr"></div>
+
+      <h2>2) Replacement Engine </h2>
+ 
+
+      <div class="actions">
+        <button class="btn-primary" onclick="generate()">Generate recommendations!</button>
+<button id="btnCsv" class="btn-ghost" onclick="exportCSV()" disabled>Download CSV</button>
+<button id="btnCopy" class="btn-ghost" onclick="copySummary()" disabled>Copy Results</button>
+      </div>
+
+      <div class="footnote">
+        <br><strong>“Export as CSV or copy the recommendations”</strong>
+      </div>
+    </div>
+
+    <!-- RIGHT: CART + OUTPUT + LEAD -->
+    <div class="card">
+      <h2>Converter Chart (Results)</h2>
+      
+
+      <div class="table-scroll">
+  <table class="table" id="cartTable">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Current</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+      <div class="kpi" style="grid-template-columns:1fr;">
+        <div class="kbox">
+          <div class="k">Total Lines</div>
+          <div class="v" id="kpiLines">0</div>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <h2>Results</h2>
+<div class="output-scroll">
+  <div id="output" class="mini muted">No recommendations generated yet.</div>
+</div>
+
+      <div class="hr"></div>
+
+    <span class="launch-badge">Contact with Ingram Micro team</span>
+
+   
+       <div class="row">
+        <div class="field">
+          <label>Company Name </label>
+          <input id="company" placeholder="Company Name" required />
+        </div>
+        <div class="field">
+          <label>Name / Surname </label>
+          <input id="name" placeholder="Name / Surname" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <div class="field">
+          <label>Note / Request </label>
+          <textarea id="note" placeholder="Type your request | question here..."></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" onclick="emailLead()">Email Ingram Micro TR Cisco Team</button>
+    <!--      <button class="btn-ghost" onclick="emailLead(true)">Mail At (Öneri + CSV metni)</button> -->
+      </div>
+
+      <div class="actions" style="justify-content:flex-end; margin-top:12px;">
+        <button class="btn-danger" onclick="clearAll()">Reset ALL</button>
+      </div>
+
+
+      <div class="footnote">
+         <strong>Note: This tool is for reference purposes only. 
+The final product/license selection may vary depending on the existing architecture (on-premises/cloud), user profile, call control, and integration requirements.</strong>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   DATASET (PLACEHOLDER-FRIENDLY)
+   ========================================================================= */
+
+const CONTACT_EMAIL = "cisco.tr@ingrammicro.com";
+
+  const FALLBACK_MESSAGE_EN =
+  "Recommended product family is available. For exact configuration and SKU selection, please contact Ingram Micro TR Cisco team.";
+
+const categories = [
+  { key:"phones",      label:"Phones" },
+  { key:"video",       label:"Video Endpoints" },
+  { key:"boards",      label:"Boards / Desk" },
+  { key:"audio",       label:"Audio / Conferencing" },
+  { key:"cmcc",        label:"CM & CC" }
+];
+
+const itemsByCategory = {
+
+phones: [
+
+  {
+    id:"ph_7945",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 7945",
+    legacySku:"CP-7945G",
+    replacement:[
+      { label:"Cisco IP Phone 8841", sku:"CP-8841-K9=", confidence:"high", note:"Direct mid-tier desk replacement." }
+    ],
+    tags:["Desk","Previous Gen"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7965",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 7965",
+    legacySku:"CP-7965G",
+    replacement:[
+      { label:"Cisco IP Phone 8851", sku:"CP-8851-K9=", confidence:"high", note:"Higher-tier desk replacement." }
+    ],
+    tags:["Desk","Previous Gen"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7975",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 7975",
+    legacySku:"CP-7975G",
+    replacement:[
+      { label:"Cisco IP Phone 8861", sku:"CP-8861-K9=", confidence:"high", note:"Color display enterprise replacement." }
+    ],
+    tags:["Desk","VideoPhone"],
+    urgency:"high"
+  },
+
+  /* --- Wireless 792x --- */
+
+  {
+    id:"ph_7921",
+    type:"PHONE",
+    legacyLabel:"Cisco Wireless IP Phone 7921",
+    legacySku:"CP-7921G",
+    replacement:[
+      { label:"Cisco Wireless Phone 840S", sku:"CP-840S-K9=", confidence:"high", note:"Direct Wi-Fi handset modernization path." }
+    ],
+    tags:["Wireless"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7925",
+    type:"PHONE",
+    legacyLabel:"Cisco Wireless IP Phone 7925",
+    legacySku:"CP-7925G",
+    replacement:[
+      { label:"Cisco Wireless Phone 840S", sku:"CP-840S-K9=", confidence:"high", note:"Standard wireless refresh." }
+    ],
+    tags:["Wireless"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7926",
+    type:"PHONE",
+    legacyLabel:"Cisco Wireless IP Phone 7926",
+    legacySku:"CP-7926G",
+    replacement:[
+      { label:"Cisco Wireless Phone 860", sku:"CP-860-K9=", confidence:"high", note:"Rugged wireless replacement." }
+    ],
+    tags:["Wireless"],
+    urgency:"high"
+  },
+
+
+  /* --- Conference --- */
+
+  {
+    id:"ph_7935",
+    type:"PHONE",
+    legacyLabel:"Cisco Conference Phone 7935",
+    legacySku:"CP-7935",
+    replacement:[
+      { label:"Cisco IP Conference Phone 8832", sku:"CP-8832-EU-K9", confidence:"high", note:"Direct conference replacement." }
+    ],
+    tags:["Conference"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7936",
+    type:"PHONE",
+    legacyLabel:"Cisco Conference Phone 7936",
+    legacySku:"CP-7936",
+    replacement:[
+      { label:"Cisco IP Conference Phone 8832", sku:"CP-8832-EU-K9", confidence:"high", note:"Direct conference replacement." }
+    ],
+    tags:["Conference"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_7937",
+    type:"PHONE",
+    legacyLabel:"Cisco Conference Phone 7937",
+    legacySku:"CP-7937",
+    replacement:[
+      { label:"Cisco IP Conference Phone 8832", sku:"CP-8832-EU-K9", confidence:"high", note:"Direct conference replacement." }
+    ],
+    tags:["Conference"],
+    urgency:"high"
+  },
+
+  {
+  id:"ph_8941",
+  type:"PHONE",
+  legacyLabel:"Cisco Unified IP Phone 8941",
+  legacySku:"CP-8941-K9=",
+  replacement:[
+    { label:"Cisco IP Phone 8841", sku:"CP-8841-K9=", confidence:"med", note:"Desk refresh. Confirm exact successor per customer platform (UCM/MPP)." }
+  ],
+  tags:["Desk","Previous Gen"],
+  urgency:"high"
+},
+
+{
+  id:"ph_8945",
+  type:"PHONE",
+  legacyLabel:"Cisco Unified IP Phone 8945",
+  legacySku:"CP-8945-K9=",
+  replacement:[
+    { label:"Cisco IP Phone 8845 / 8865 (video-capable)", sku:"***to be decided***", confidence:"low", note:"8945 is video-oriented. Confirm preferred video desk model and platform." }
+  ],
+  tags:["Desk","VideoPhone","Previous Gen"],
+  urgency:"high"
+},
+
+{
+  id:"ph_8961",
+  type:"PHONE",
+  legacyLabel:"Cisco Unified IP Phone 8961",
+  legacySku:"CP-8961-W-K9=",
+  replacement:[
+    { label:"Cisco IP Phone 8851 / 8861", sku:"***to be decided***", confidence:"low", note:"Advanced color desk phone refresh; pick based on feature needs." }
+  ],
+  tags:["Desk","Previous Gen"],
+  urgency:"high"
+},
+
+  /* --- 9900 Series --- */
+
+  {
+    id:"ph_9951",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 9951",
+    legacySku:"CP-9951",
+    replacement:[
+      { label:"Cisco IP Phone 8875", sku:"CP-8875-K9=", confidence:"high", note:"Video-capable enterprise desk phone." }
+    ],
+    tags:["VideoPhone"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_9971",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 9971",
+    legacySku:"CP-9971",
+    replacement:[
+      { label:"Cisco IP Phone 8875", sku:"CP-8875-K9=", confidence:"high", note:"Video-capable enterprise desk phone." }
+    ],
+    tags:["VideoPhone"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_spa300",
+    type:"PHONE",
+    legacyLabel:"Cisco SPA 300 Series",
+    legacySku:"(EoS)",
+    replacement:[
+      {
+        label:"Cisco IP Phone 7811", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Cisco IP Phone 7811 with Multiplatform Phone firmware"
+      }
+    ],
+    tags:["SmallBusiness","Previous Gen"],
+    urgency:"high"
+  },
+
+  
+/* --- SPA500 Series (split by model) --- */
+
+{
+  id:"ph_spa501g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA501G",
+  legacySku:"SPA501G",
+  replacement:[
+    { label:"Cisco IP Phone 7861 (MPP / 3PCC)", sku:"CP-7861-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+{
+  id:"ph_spa502g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA502G",
+  legacySku:"SPA502G",
+  replacement:[
+    { label:"Cisco IP Phone 7811 (MPP / 3PCC)", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+{
+  id:"ph_spa504g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA504G",
+  legacySku:"SPA504G",
+  replacement:[
+    { label:"Cisco IP Phone 7841 (MPP / 3PCC)", sku:"CP-7841-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+{
+  id:"ph_spa512g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA512G",
+  legacySku:"SPA512G",
+  replacement:[
+    { label:"Cisco IP Phone 7811 (MPP / 3PCC)", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+{
+  id:"ph_spa525g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA525G",
+  legacySku:"SPA525G",
+  replacement:[
+    { label:"Cisco IP Phone 8861 (MPP / 3PCC)", sku:"CP-8861-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen","Wireless"],
+  urgency:"high"
+},
+{
+  id:"ph_spa525g2",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA525G2",
+  legacySku:"SPA525G2",
+  replacement:[
+    { label:"Cisco IP Phone 8861 (MPP / 3PCC)", sku:"CP-8861-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen","Wireless"],
+  urgency:"high"
+},
+
+  
+  {
+    id:"ph_8865",
+    type:"PHONE",
+    legacyLabel:"Cisco IP Phone 8865",
+    legacySku:"(EoS)",
+    replacement:[
+      {
+	label:"Cisco IP Phone 8875", sku:"CP-8875-K9=", confidence:"high", note:"Video-capable enterprise desk phone."
+      }
+    ],
+    tags:["VideoPhone"],
+    urgency:"high"
+  },
+
+ 
+  {
+    id:"ph_8831",
+    type:"PHONE",
+    legacyLabel:"Cisco Unified IP Conference Phone 8831",
+    legacySku:"(EoS)",
+    replacement:[
+      {
+        label:"Cisco IP Conference Phone 8832",
+        sku:"CP-8832-EU-K9",
+        confidence:"high",
+        note:"8832 base in charcoal color for APAC, EMEA, and Australia"
+      }
+    ],
+    tags:["Conference"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_8821",
+    type:"PHONE",
+    legacyLabel:"Cisco Wireless IP Phone 8821",
+    legacySku:"(EoS)",
+    replacement:[
+      {
+        label:"Cisco Wireless Phone 840",
+        sku:"CP-840-K9=",
+        confidence:"med",
+        note:"1-1 wireless migration path (choose 840 vs 860 by environment & durability needs)."
+      },
+      {
+        label:"Cisco Wireless Phone 860",
+        sku:"CP-860-K9=",
+        confidence:"med",
+        note:"1-1 wireless migration path (choose 840 vs 860 by environment & durability needs)."
+      }
+    ],
+    tags:["Wireless"],
+    urgency:"high"
+  },
+
+/* --- ATA Family --- */
+
+  {
+    id:"ph_ata_186",
+    type:"PHONE",
+    legacyLabel:"Cisco ATA 186",
+    legacySku:"ATA186",
+    replacement:[
+      { label:"Cisco ATA 191", sku:"ATA191-K9", confidence:"high", note:"Modern analog telephony adapter." }
+    ],
+    tags:["ATA"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_ata_187",
+    type:"PHONE",
+    legacyLabel:"Cisco ATA 187",
+    legacySku:"ATA187",
+    replacement:[
+      { label:"Cisco ATA 191", sku:"ATA191-K9", confidence:"high", note:"Modern analog telephony adapter." }
+    ],
+    tags:["ATA"],
+    urgency:"high"
+  },
+
+  {
+    id:"ph_8821ex",
+    type:"PHONE",
+    legacyLabel:"Cisco Wireless IP Phone 8821-EX",
+    legacySku:"(EoS)",
+    replacement:[
+      {
+        label:"Cisco Wireless Phone 840",
+        sku:"CP-840-K9=",
+        confidence:"med",
+        note:"Validate hazardous/ATEX compliance requirements."
+      },
+      {
+        label:"Cisco Wireless Phone 860",
+        sku:"CP-860-K9=",
+        confidence:"med",
+        note:"Validate hazardous/ATEX compliance requirements."
+      }
+    ],
+    tags:["Wireless","Hazardous"],
+    urgency:"high"
+  }
+ 
+],
+
+
+video: [
+
+
+  { id:"vd_room55", type:"VIDEO",
+    legacyLabel:"Cisco Webex Room 55",
+    legacySku:"CS-ROOM55-K9",
+    replacement:[
+      { label:"Cisco Room Bar", sku:"CS-BAR-K9", confidence:"med", note:"Small/medium room refresh." },
+      { label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9", confidence:"med", note:"If interactive board experience preferred." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
+  { id:"vd_room55dual", type:"VIDEO",
+    legacyLabel:"Cisco Webex Room 55 Dual",
+    legacySku:"CS-ROOM55D-K9",
+    replacement:[
+      { label:"Cisco Room Kit EQ, Quad Cam, First Light", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Dual display capable architecture." },
+   ],
+    tags:["Room","DualDisplay"], urgency:"high"
+  },
+
+  { id:"vd_sx80", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence SX80 Codec kit",
+    legacySku:"CTS-SX80-K9",
+    replacement:[
+      { label:"Cisco Codec Pro G2, Standalone", sku:"CS-CPRO-K9", confidence:"high", note:"Direct modern codec successor." }
+    ],
+    tags:["Codec","Room"], urgency:"high"
+  },
+
+  { id:"vd_sx20", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence SX20 Quick Set",
+    legacySku:"CTS-SX20N-CODEC",
+    replacement:[
+      { label:"Cisco Codec EQ - Stand Alone", sku:"CS-CODEC-EQ-K9", confidence:"med", note:"Small/medium room modernization." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
+  { id:"vd_sx10", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence SX10 Quick Set",
+    legacySku:"CTS-SX10N-K9",
+    replacement:[
+      { label:"Cisco Room Bar in First Light w/Navigator(Table Stand)", sku:"CS-BAR-T-K9", confidence:"med", note:"Huddle room refresh." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
+  { id:"vd_mx800", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence MX800",
+    legacySku:"CTS-MX800xxx-xxx",
+    replacement:[
+      { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Standard large room refresh." },
+          ],
+    tags:["TelePresence","Room"], urgency:"high"
+  },
+
+  { id:"vd_mx700", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence MX700",
+    legacySku:"CTS-MX700xxx-xxx",
+    replacement:[
+      { label:"Cisco Room Kit EQX, First Light (White)", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Large room modernization." }
+    ],
+    tags:["TelePresence","Room"], urgency:"high"
+  },
+
+ 
+  { id:"vd_ex90", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence System EX90",
+    legacySku:"CTS-EX90-K9",
+    replacement:[
+      { label:"Cisco Desk Pro G2", sku:"CS-DESKP-C-K9", confidence:"high", note:"Personal video endpoint modernization." }
+    ],
+    tags:["Desk","Personal"], urgency:"high"
+  },
+
+
+  { id:"vd_roomkit", type:"VIDEO",
+    legacyLabel:"Cisco Room Kit",
+    legacySku:"CS-KIT-K9",
+    replacement:[
+      { label:"Cisco Room Bar Pro, First Light", sku:"CS-BARPRO-K9", confidence:"med", note:"Next-gen BARPRO." }
+    ],
+    tags:["Room","Migration"], urgency:"high"
+  },
+
+  { id:"vd_roomkitmini", type:"VIDEO",
+    legacyLabel:"Cisco Room Kit Mini",
+    legacySku:"CS-KIT-MINI-K9",
+    replacement:[
+      { label:"Cisco Room Bar in First Light w/Navigator(Table Stand)", sku:"CS-BAR-T-K9", confidence:"high", note:"Direct modernization path." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
+  { id:"vd_roomkitplus", type:"VIDEO",
+    legacyLabel:"Cisco Room Kit Plus",
+    legacySku:"CS-KITPLUS-K9",
+    replacement:[
+      { label:"Cisco Room Kit EQ", sku:"CS-KITEQ-K9", confidence:"med", note:"Medium/large room refresh." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
+  { id:"vd_codecpro", type:"VIDEO",
+    legacyLabel:"Cisco Codec Pro",
+    legacySku:"CS-CODEC-PRO-K9",
+    replacement:[
+      { label:"Cisco Codec Pro G2, Standalone", sku:"CS-CPRO-K9", confidence:"med", note:"Validate camera/display architecture." }
+    ],
+    tags:["Codec","Pro"], urgency:"high"
+  },
+
+{ id:"vd_roomkitpro", type:"VIDEO",
+    legacyLabel:"Cisco Room Kit Pro",
+    legacySku:"CS-KITPRO-K9",
+    replacement:[
+      { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Validate camera/display architecture." }
+    ],
+    tags:["Room","Pro"], urgency:"high"
+  },
+
+  { id:"vd_p60_camera", type:"VIDEO",
+    legacyLabel:"PrecisionHD Camera 1080p 12x Gen 2",
+    legacySku:"CTS-PHD1080P12XS2",
+    replacement:[
+      { label:"Pan-Tilt-Zoom 4K 20x Camera-SPARE", sku:"CS-CAM-PTZ4K=", confidence:"med", note:"Modern PTZ camera option." }
+    ],
+    tags:["Camera","Accessory"], urgency:"med"
+  },
+
+  { id:"vd_room_panorama_82", type:"VIDEO",
+    legacyLabel:"Cisco Room Panorama",
+    legacySku:"CS-ROOM-PANO-K9",
+    replacement:[
+      { label:"Cisco Room Kit EQX, First Light (White)", sku:"CS-KIT-EQX-K9", confidence:"low", note:"Immersive architecture-based replacement." }
+    ],
+    tags:["Immersive","Room"], urgency:"high"
+  },
+
+ 
+  { id:"vd_room70dg2", type:"VIDEO",
+    legacyLabel:"Cisco Webex Room 70D G2",
+    legacySku:"CS-ROOM70DG2-K9",
+    replacement:[
+      { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Large room refresh." }
+    ],
+    tags:["Room","LargeRoom"], urgency:"high"
+  },
+
+  { id:"vd_room70sg2", type:"VIDEO",
+    legacyLabel:"Cisco Webex Room 70S G2",
+    legacySku:"CS-ROOM70SG2-K9",
+    replacement:[
+      { label:"Cisco Board Pro 75 G2", sku:"CS-BRDP75-K9", confidence:"med", note:"Large room refresh." }
+    ],
+    tags:["Room","LargeRoom"], urgency:"high"
+  }
+
+],
+
+boards: [
+  /* --- Boards / Desk: eos-eol-listing.html --- */
+
+  {
+    id:"bd_board85s",
+    type:"BOARD",
+    legacyLabel:"Cisco Webex Board 85S",
+    legacySku:"CS-BOARD85S-K9",
+    replacement:[
+      { label:"Cisco Board Pro 75 G2", sku:"CS-BRDP75-K9", confidence:"med", note:"Refresh to Board Pro; select exact model by room size and display preference." }
+    ],
+    tags:["Board","Workspace"],
+    urgency:"high"
+  },
+
+
+  {
+    id:"bd_board70s",
+    type:"BOARD",
+    legacyLabel:"Cisco Webex Board 70S",
+    legacySku:"CS-BOARD70S-K9",
+    replacement:[
+      { label:"Cisco Board Pro 75 G2", sku:"CS-BRDP75-K9", confidence:"med", note:"Refresh to Board Pro; exact model depends on room size." }
+    ],
+    tags:["Board","Workspace"],
+    urgency:"high"
+  },
+
+  {
+    id:"bd_board55s",
+    type:"BOARD",
+    legacyLabel:"Cisco Webex Board 55S",
+    legacySku:"CS-BOARD55S-K9",
+    replacement:[
+      { label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9", confidence:"med", note:"Refresh to Board Pro; exact model depends on room size." }
+    ],
+    tags:["Board","Workspace"],
+    urgency:"high"
+  },
+
+
+  {
+    id:"bd_dx80",
+    type:"DESK",
+    legacyLabel:"Cisco Webex DX80",
+    legacySku:"CP-DX80-K9=",
+    replacement:[
+      { label:"Cisco Webex Desk", sku:"CS-DESK-K9", confidence:"med", note:"Desk endpoint modernization." },
+      { label:"Cisco Desk Pro G2 (Carbon Black)", sku:"CS-DESKP-C-K9", confidence:"med", note:"Upgrade path for advanced/power users." }
+    ],
+    tags:["Desk","Personal"],
+    urgency:"high"
+  },
+
+
+  {
+    id:"bd_webex_desk_le",
+    type:"DESK",
+    legacyLabel:"Cisco Webex Desk Limited Edition",
+    legacySku:"CS-DESK-LE-K9",
+    replacement:[
+      { label:"Cisco Webex Desk", sku:"CS-DESK-K9", confidence:"med", note:"Choose current standard model." },
+      { label:"Cisco Desk Pro G2 (Carbon Black)", sku:"CS-DESKP-C-K9", confidence:"med", note:"If pro camera/screen experience needed." }
+    ],
+    tags:["Desk"],
+    urgency:"med"
+  },
+
+
+  /* --- Spark/Room Kit Series notice listing: includes Room USB --- */
+
+  {
+    id:"bd_roomkitusb",
+    type:"DESK",
+    legacyLabel:"Cisco Room USB",
+    legacySku:"CS-ROOM-USB-K9",
+    replacement:[
+      { label:"Cisco Room Bar in First Light w/Navigator(Table Stand)", sku:"CS-BAR-T-K9", confidence:"med", note:"Select based on room size and USB/Teams/Webex interoperability requirements." }
+    ],
+    tags:["Room","USB"],
+    urgency:"med"
+  }
+
+],
+
+
+
+audio: [
+  /* --- Audio / accessories from eos-eol-listing.html + room kit notice list --- */
+
+  {
+    id:"au_headset980",
+    type:"AUDIO",
+    legacyLabel:"Bang & Olufsen Cisco 980",
+    legacySku:"HS-WL-980-BUNA-C",
+    replacement:[
+      {
+        label:"Bang & Olufsen Cisco 950 (successor option in bulletin)",
+        sku:"HS-WL-950-BUN-C",
+        confidence:"med",
+        note:"Cisco bulletin lists B&O Cisco 950 as migration option; choose by preference (over-ear vs in-ear)."
+      }
+    ],
+    tags:["Headset"],
+    urgency:"low"
+  },
+
+  {
+    id:"au_tablemic20",
+    type:"AUDIO",
+    legacyLabel:"Cisco Table Microphone 20",
+    legacySku:"CTS-MIC-TABL20",
+    replacement:[
+      {
+        label:"Cisco Table Microphone with Jack plug",
+        sku:"CS-MIC-TABLE-J=",
+        confidence:"high",
+        note:"Match to selected RoomOS endpoint / codec and mic interface."
+      }
+    ],
+    tags:["Microphone"],
+    urgency:"med"
+  },
+
+  /* Missing in your list -> added */
+  {
+    id:"au_tablemic60",
+    type:"AUDIO",
+    legacyLabel:"Cisco Table Microphone 60",
+    legacySku:"CTS-MIC-TABL60",
+    replacement:[
+      {
+        label:"Cisco Table Microphone with Euroblock plug",
+        sku:"CS-MIC-TABLE-E=",
+        confidence:"high",
+        note:"Use when Euroblock interface is required; match to endpoint/codec."
+      }
+    ],
+    tags:["Microphone"],
+    urgency:"med"
+  },
+
+
+  {
+    id:"au_touch",
+    type:"AUDIO",
+    legacyLabel:"Cisco TelePresence Touch Model (Touch 10)",
+    legacySku:"CTS-CTRL-DV10",
+    replacement:[
+      {
+        label:"Cisco Room Navigator Table Stand, First Light (White) -SPARE",
+        sku:"CS-T10-TS-L-K9=",
+        confidence:"high",
+        note:"Direct controller replacement per Cisco bulletin."
+      },
+ ],
+    tags:["Controller","Room"],
+    urgency:"med"
+  }
+
+],
+ 
+
+cmcc: [
+  
+  /* Missing item -> added (subscription packaging called out by Cisco) */
+  {
+    id:"cc_tms_xe_subs",
+    type:"CM/CC",
+    legacyLabel:"Cisco TMS + Exchange Integration (XE) Subscriptions",
+    legacySku:"A-CMS-API & A-FLEX-TMS & A-CMS-TMS",
+    replacement:[
+      { label:"Hybrid calendar + room booking integrations (cloud)", sku:"N/A", confidence:"low", note:"Modern room booking via cloud integrations (packaging varies by offer)." }
+    ],
+    tags:["Management","Integration","Calendar"],
+    urgency:"med"
+  },
+
+
+  /* --- On-Prem CM License placeholders (keep as placeholders) --- */
+
+  {
+    id:"cm_cucm_enhance",
+    type:"CM/CC",
+    legacyLabel:"CUCM Licensing",
+    legacySku:"R-UCL-UCM-LIC-K9",
+    replacement:[
+      { label:"Collaboration Flex Plan 3.0", sku:"A-FLEX-3", confidence:"low", note:"Replace with modern subscription model." }
+    ],
+    tags:["License","On-Prem"],
+    urgency:"med"
+  },
+
+ 
+  /* --- Contact Center (grouped versions) --- */
+
+  {
+    id:"cc_uccx_11x",
+    type:"CM/CC",
+    legacyLabel:"Cisco Unified Contact Center Express < 12.x",
+    legacySku:"CCX-xxxx",
+    replacement:[
+      { label:"Customers are encouraged to move to version 15 or higher", sku:"UCCX v.15", confidence:"low", note:"https://www.cisco.com/c/en/us/support/docs/contact-center/unified-contact-center-express-1501/225412-step-by-step-guide-to-upgrade-uccx.html" }
+    ],
+    tags:["UCCX","CloudMigration"],
+    urgency:"high"
+  },
+
+  {
+    id:"cc_ipivr_11x",
+    type:"CM/CC",
+    legacyLabel:"Cisco Unified IP IVR <12.x",
+    legacySku:"***to be decided***",
+    replacement:[
+      { label:"Customers are encouraged to move to version Unified IP Interactive Voice Response (IVR) 12.5(1)", sku:"N/A", confidence:"low", note:"Modern IVR via Webex Contact Center also can be selected." }
+    ],
+    tags:["IVR","CloudMigration"],
+    urgency:"high"
+  },
+
+  {
+    id:"cc_wxem_cloudcherry",
+    type:"CM/CC",
+    legacyLabel:"Cisco Webex Experience Management (formerly CloudCherry)",
+    legacySku:"A-WXM-xxx",
+    replacement:[
+      { label:"Webex Experience Management -> Contact Center Workflows ", sku:"N/A", confidence:"low", note:"" }
+    ],
+    tags:["Experience","CX"],
+    urgency:"med"
+  }
+
+]
+
+
+};
+
+/* =========================================================================
+   APP STATE
+   ========================================================================= */
+let activeCategory = categories[0].key;
+let cart = [];
+let recommendationsGenerated = false;
+
+/* =========================================================================
+   INIT UI
+   ========================================================================= */
+initTabs();
+refreshLegacySelect();
+updateHint();
+renderCart();
+setPostActionsEnabled(false);
+
+/* =========================================================================
+   TABS
+   ========================================================================= */
+function initTabs(){
+  const el = document.getElementById("tabs");
+  el.innerHTML = "";
+  categories.forEach(c=>{
+    const b = document.createElement("div");
+    b.className = "tab" + (c.key===activeCategory ? " active":"");
+    b.textContent = c.label;
+    b.onclick = ()=>{ activeCategory=c.key; setActiveTab(); refreshLegacySelect(); updateHint(); };
+    el.appendChild(b);
+  });
+}
+function setActiveTab(){
+  const el = document.getElementById("tabs");
+  [...el.children].forEach((child, idx)=>{
+    const key = categories[idx].key;
+    child.className = "tab" + (key===activeCategory ? " active":"");
+  });
+}
+
+/* =========================================================================
+   SEARCH + SELECT
+   ========================================================================= */
+document.getElementById("searchBox").addEventListener("input", ()=>{
+  refreshLegacySelect();
+});
+
+function refreshLegacySelect(){
+  const select = document.getElementById("legacySelect");
+  const query = (document.getElementById("searchBox").value || "").trim().toLowerCase();
+  const list = itemsByCategory[activeCategory] || [];
+
+  const filtered = !query ? list : list.filter(x =>
+    x.legacyLabel.toLowerCase().includes(query) ||
+    (x.legacySku || "").toLowerCase().includes(query) ||
+    (x.type || "").toLowerCase().includes(query) ||
+    (x.tags || []).join(" ").toLowerCase().includes(query)
+  );
+filtered.sort((a, b) => {
+  const labelCompare = a.legacyLabel.localeCompare(b.legacyLabel, undefined, { sensitivity: "base" });
+  if (labelCompare !== 0) return labelCompare;
+  return (a.legacySku || "").localeCompare(b.legacySku || "", undefined, { sensitivity: "base" });
+});
+
+  select.innerHTML = "";
+  if(filtered.length === 0){
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "No results (change search/category)";
+    select.appendChild(opt);
+    return;
+  }
+
+  filtered.forEach(x=>{
+    const opt = document.createElement("option");
+    opt.value = x.id;
+    opt.textContent = x.legacyLabel;
+    select.appendChild(opt);
+  });
+}
+
+function updateHint(){
+  const h = document.getElementById("hint");
+  const cat = categories.find(c=>c.key===activeCategory)?.label || activeCategory;
+  h.innerHTML = `Selected Prod Family: ${cat}.<br>
+Choose Product → Add to Chart.`;
+}
+
+/* =========================================================================
+   CART
+   ========================================================================= */
+function addItem(){
+  const itemId = document.getElementById("legacySelect").value;
+  if(!itemId) return;
+
+  const existing = cart.find(x=>x.itemId===itemId);
+  if(existing) return; // guide mode: avoid duplicates
+  cart.push({ itemId });
+
+  renderCart();
+}
+
+function addAllMatches(){
+  const query = (document.getElementById("searchBox").value || "").trim().toLowerCase();
+  const list = itemsByCategory[activeCategory] || [];
+  const filtered = !query ? list : list.filter(x =>
+    x.legacyLabel.toLowerCase().includes(query) ||
+    (x.legacySku || "").toLowerCase().includes(query) ||
+    (x.tags || []).join(" ").toLowerCase().includes(query)
+  );
+  if(filtered.length === 0) return;
+
+  filtered.forEach(x=>{
+    const existing = cart.find(c=>c.itemId===x.id);
+    if(existing) return;
+    cart.push({ itemId:x.id });
+  });
+  renderCart();
+}
+
+function removeFromCart(itemId){
+  cart = cart.filter(x=>x.itemId!==itemId);
+  renderCart();
+}
+
+function clearAll(){
+  cart = [];
+  document.getElementById("output").innerHTML = "No recommendations generated yet.";
+  recommendationsGenerated = false;
+
+  document.getElementById("company").value = "";
+  document.getElementById("name").value = "";
+  document.getElementById("note").value = "";
+setPostActionsEnabled(false);
+  renderCart();
+setPostActionsEnabled(false);
+}
+function getItemById(id){
+  for(const k of Object.keys(itemsByCategory)){
+    const found = itemsByCategory[k].find(x=>x.id===id);
+    if(found) return found;
+  }
+  return null;
+}
+
+function renderCart(){
+  const tbody = document.querySelector("#cartTable tbody");
+  tbody.innerHTML = "";
+
+  let totalLines = 0;
+  
+
+  cart.forEach(entry=>{
+    const item = getItemById(entry.itemId);
+    if(!item) return;
+
+    totalLines += 1;
+    
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${item.type}</td>
+      <td>
+        <div><strong>${escapeHtml(item.legacyLabel)}</strong></div>
+        <div class="muted" style="font-size:12px; margin-top:4px;">${escapeHtml(item.legacySku || "")}</div>
+        <div>${renderChips(item)}</div>
+      </td>
+      <td><button class="btn-danger" style="padding:8px 10px; border-radius:10px;" onclick="removeFromCart('${item.id}')">Clear</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("kpiLines").textContent = String(totalLines);
+  
+if(cart.length === 0){
+  document.getElementById("output").innerHTML = "No recommendations generated yet.";
+  recommendationsGenerated = false;
+  setPostActionsEnabled(false);
+} else if(recommendationsGenerated){
+  generate(); // cart değiştiyse sonuçları güncelle
+}
+
+}
+
+function renderChips(item){
+  const chips = [];
+  const urgencyClass = item.urgency === "high" ? "bad" : (item.urgency === "med" ? "warn" : "good");
+
+  (item.tags || []).slice(0,4).forEach(t=>chips.push(`<span class="chip">${escapeHtml(t)}</span>`));
+  return chips.join(" ");
+}
+
+/* =========================================================================
+   RECOMMENDATION ENGINE
+   ========================================================================= */
+function generate(){
+  if(cart.length === 0){
+   document.getElementById("output").innerHTML = "Cart is empty.";
+    return;
+  }
+
+   const lines = cart.map(entry=>{
+    const item = getItemById(entry.itemId);
+    if(!item) return null;
+
+    const recs = getReplacements(item);
+    const oldLabel = item.legacyLabel;
+    const oldSku = item.legacySku || "";
+    return { type:item.type, oldLabel, oldSku, recs };
+  }).filter(Boolean);
+
+  document.getElementById("output").innerHTML = renderOutput(lines);
+recommendationsGenerated = true;
+setPostActionsEnabled(true);
+}
+
+function getReplacements(item){
+  const list = Array.isArray(item.replacement) ? item.replacement.filter(Boolean) : [];
+  if(list.length === 0){
+    return [{
+      label: FALLBACK_MESSAGE_EN,
+      sku: "",
+      confidence: "low",
+      note: ""
+    }];
+  }
+  return list;
+}
+
+
+function renderOutput(lines){
+  const byType = groupBy(lines, "type");
+
+
+  let out = "";
+  out += `<div style="font-weight:900; color:#123a58; font-size:14px;">Recommendation Summary</div>`;
+  out += `<div class="muted" style="margin-top:6px; line-height:1.45;">Total lines: <strong>${lines.length}</strong></div>`;
+ 
+  out += `<div class="hr"></div>`;
+
+  Object.keys(byType).forEach(type=>{
+    out += `<div style="font-weight:900; margin-top:10px; color:#123a58;">${escapeHtml(type)}</div>`;
+    out += `<table class="table" style="margin-top:6px;">
+      <thead>
+        <tr>
+<th>Existing</th>
+<th>Recommended</th>
+<th>New SKU</th>
+        </tr>
+      </thead>
+      <tbody>
+    `;
+
+    byType[type].forEach(x=>{
+      const recLines = (x.recs || []).map(r=>{
+        const label = escapeHtml(r.label || "");
+        const sku = escapeHtml(r.sku || "");
+        const note = escapeHtml(r.note || "");
+        return {
+          labelHtml: `${label}${note ? `<div class="muted" style="font-size:12px; margin-top:6px;">${note}</div>` : ""}`,
+          skuText: sku
+        };
+      });
+
+      const recHtml = recLines.map((r, i)=>`<div${i?` style="margin-top:10px;"`:``}>${r.labelHtml}</div>`).join("");
+      const skuHtml = recLines.map((r, i)=>`<div${i?` style="margin-top:10px;"`:``}>${r.skuText}</div>`).join("");
+
+      out += `
+        <tr>
+          <td>
+            <div><strong>${escapeHtml(x.oldLabel)}</strong></div>
+            <div class="muted" style="font-size:12px; margin-top:4px;">${escapeHtml(x.oldSku)}</div>
+          </td>
+          <td>${recHtml}</td>
+          <td>${skuHtml}</td>
+        </tr>
+      `;
+    });
+
+    out += `</tbody></table>`;
+  });
+
+  out += `<div class="hr"></div>`;
+  out += `<div class="muted" style="font-size:12px; line-height:1.5;">
+   
+  </div>`;
+
+  return out;
+}
+
+
+/* =========================================================================
+   EXPORT / COPY / EMAIL
+   ========================================================================= */
+function exportCSV(){
+  const lines = buildExportLines();
+  if(lines.length === 0) return;
+
+  const header = ["Type","Legacy","LegacySKU","Recommendation","NewSKU","Confidence","Note"].join(",");
+  const rows = lines.map(r => [
+    csv(r.type),
+    csv(r.oldLabel),
+    csv(r.oldSku),
+    csv(r.recText || ""),
+    csv(r.skuText || ""),
+    csv((r.confText || "LOW").toUpperCase()),
+    csv(r.noteText || "")
+  ].join(","));
+
+  const csvText = [header, ...rows].join("\n");
+  downloadText("Cisco Collaboration Replacement/Renewal Guidance.csv", csvText);
+}
+
+function copySummary(){
+  const lines = buildExportLines();
+  if(lines.length === 0) return;
+
+  let text = "Cisco Collaboration Replacement/Renewal Guidance\n";
+  text += "------------------------------------------\n";
+  lines.forEach(r=>{
+    text += `- [${r.type}] ${r.oldLabel} => ${r.recText}${r.skuText ? " (" + r.skuText + ")" : ""}
+`;
+  });
+
+  navigator.clipboard?.writeText(text).catch(()=>{});
+}
+
+function emailLead(includeCsvText){
+  const companyEl = document.getElementById("company");
+  const nameEl = document.getElementById("name");
+  const noteEl = document.getElementById("note");
+
+  const company = (companyEl.value || "").trim();
+  const name = (nameEl.value || "").trim();
+  const note = (noteEl.value || "").trim();
+
+  // Required fields validation
+  if(!company){
+  alert("Company name is required.");
+  companyEl.focus();
+  return;
+}
+if(!name){
+  alert("Name / Surname is required.");
+  nameEl.focus();
+  return;
+}
+if(!note){
+  alert("Note / Request is required.");
+  noteEl.focus();
+  return;
+}
+
+  const lines = buildExportLines();
+
+  // Require the user to run the engine first
+  if(!recommendationsGenerated){
+    alert("Please click 'Generate recommendations!' before sending the form.");
+    return;
+  }
+
+  // (Optional but recommended) Prevent sending a lead if the cart is empty
+  if(lines.length === 0){
+    alert("Cart is empty. Please add items and generate recommendations.");
+    return;
+  }
+
+  const subject = encodeURIComponent(`Cisco Collaboration Renewal Request - ${company}`);
+  let body = "";
+
+  body += `Company: ${company}\n`;
+  body += `Name: ${name}\n`;
+  if(note) body += `Note: ${note}\n`;
+  body += "\nInventory / Recommendations:\n";
+
+  lines.forEach(r=>{
+    body += `- [${r.type}] ${r.oldLabel} => ${r.recText}${r.skuText ? " | New SKU: " + r.skuText : ""}
+`;
+  });
+
+  if(includeCsvText){
+    body += "\n--- CSV (text) ---\n";
+    body += buildCsvTextInline(lines);
+  }
+
+  const mailto = `mailto:${encodeURIComponent(CONTACT_EMAIL)}?subject=${subject}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+}
+function buildExportLines(){
+  if(cart.length === 0) return [];
+  return cart.map(entry=>{
+    const item = getItemById(entry.itemId);
+    if(!item) return null;
+   const recs = getReplacements(item);
+
+    const recText = recs.map(r => (r.label || "").trim()).filter(Boolean).join(" / ");
+    const skuText = recs.map(r => (r.sku || "").trim()).filter(Boolean).join(" / ");
+    const confText = recs.map(r => (r.confidence || "low").trim()).filter(Boolean).join(" / ");
+    const noteText = recs.map(r => (r.note || "").trim()).filter(Boolean).join(" / ");
+
+    return {
+      type: item.type,
+      oldLabel: item.legacyLabel,
+      oldSku: item.legacySku || "",
+      recs,
+      recText,
+      skuText,
+      confText,
+      noteText
+    };
+  }).filter(Boolean);
+}
+
+function buildCsvTextInline(lines){
+  const header = ["Type","Legacy","LegacySKU","Recommendation","NewSKU","Confidence","Note"].join(",");
+  const rows = lines.map(r => [
+    r.type, r.oldLabel, r.oldSku,
+    (r.recText||""), (r.skuText||""), (r.confText||"low").toUpperCase(), (r.noteText||"")
+  ].join(","));
+  return [header, ...rows].join("\n");
+}
+
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function csv(s){
+  const x = String(s ?? "");
+  if(/[",\n]/.test(x)) return `"${x.replace(/"/g,'""')}"`;
+  return x;
+}
+
+function setPostActionsEnabled(enabled){
+  const csvBtn = document.getElementById("btnCsv");
+  const copyBtn = document.getElementById("btnCopy");
+  if(csvBtn) csvBtn.disabled = !enabled;
+  if(copyBtn) copyBtn.disabled = !enabled;
+}
+
+/* =========================================================================
+   HELPERS
+   ========================================================================= */
+function groupBy(arr, key){
+  return arr.reduce((acc, x)=>{
+    const k = x[key] || "Other";
+    (acc[k] ||= []).push(x);
+    return acc;
+  }, {});
+}
+
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+</script>
+
+</body>
+</html>
