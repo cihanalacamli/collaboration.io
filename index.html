@@ -86,7 +86,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.2fr 1.2fr;
       gap:14px;
       align-items:start;
     }
@@ -351,11 +351,11 @@
 
       <div class="row" style="margin-top:10px;">
         <div class="field">
-          <label>Search (in prod family/series)</label>
+          <label>Search (EOS products)</label>
           <input id="searchBox" type="text" placeholder="E.g: 7900, SX, MX, DX, Board, License..." />
         </div>
         <div class="field md">
-          <label>Current Product / License</label>
+          <label>EOS Product / License</label>
           <select id="legacySelect"></select>
         </div>
       </div>
@@ -584,7 +584,7 @@ phones: [
     id:"ph_7937",
     type:"PHONE",
     legacyLabel:"Cisco Conference Phone 7937",
-    legacySku:"CP-7937",
+    legacySku:"CP-7937G",
     replacement:[
       { label:"Cisco IP Conference Phone 8832", sku:"CP-8832-EU-K9", confidence:"high", note:"Direct conference replacement." }
     ],
@@ -598,7 +598,7 @@ phones: [
   legacyLabel:"Cisco Unified IP Phone 8941",
   legacySku:"CP-8941-K9=",
   replacement:[
-    { label:"Cisco IP Phone 8841", sku:"CP-8841-K9=", confidence:"med", note:"Desk refresh. Confirm exact successor per customer platform (UCM/MPP)." }
+    { label:"Cisco IP Phone 8845", sku:"CP-8845-K9=", confidence:"med", note:"Desk refresh. Confirm exact successor per customer platform (UCM/MPP)." }
   ],
   tags:["Desk","Previous Gen"],
   urgency:"high"
@@ -610,7 +610,7 @@ phones: [
   legacyLabel:"Cisco Unified IP Phone 8945",
   legacySku:"CP-8945-K9=",
   replacement:[
-    { label:"Cisco IP Phone 8845 / 8865 (video-capable)", sku:"***to be decided***", confidence:"low", note:"8945 is video-oriented. Confirm preferred video desk model and platform." }
+    { label:"Cisco IP Phone 8845 / 8865 (video-capable)", sku:"CP-8845-K9=  ", confidence:"low", note:"8945 is video-oriented. Confirm preferred video desk model and platform." }
   ],
   tags:["Desk","VideoPhone","Previous Gen"],
   urgency:"high"
@@ -622,7 +622,7 @@ phones: [
   legacyLabel:"Cisco Unified IP Phone 8961",
   legacySku:"CP-8961-W-K9=",
   replacement:[
-    { label:"Cisco IP Phone 8851 / 8861", sku:"***to be decided***", confidence:"low", note:"Advanced color desk phone refresh; pick based on feature needs." }
+    { label:"Cisco IP Phone 8851 / 8861", sku:"CP-8861-K9=", confidence:"low", note:"Advanced color desk phone refresh; pick based on feature needs." }
   ],
   tags:["Desk","Previous Gen"],
   urgency:"high"
@@ -658,7 +658,7 @@ phones: [
     id:"ph_spa300",
     type:"PHONE",
     legacyLabel:"Cisco SPA 300 Series",
-    legacySku:"(EoS)",
+    legacySku:"SPA30x-xx",
     replacement:[
       {
         label:"Cisco IP Phone 7811", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Cisco IP Phone 7811 with Multiplatform Phone firmware"
@@ -688,11 +688,12 @@ phones: [
   legacyLabel:"Cisco SPA502G",
   legacySku:"SPA502G",
   replacement:[
-    { label:"Cisco IP Phone 7811 (MPP / 3PCC)", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+    { label:"Cisco IP Phone 6821 (MPP / 3PCC)", sku:"CP-6821-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
   ],
   tags:["SmallBusiness","Previous Gen"],
   urgency:"high"
 },
+
 {
   id:"ph_spa504g",
   type:"PHONE",
@@ -704,17 +705,43 @@ phones: [
   tags:["SmallBusiness","Previous Gen"],
   urgency:"high"
 },
+
+{
+  id:"ph_spa508g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA508G",
+  legacySku:"SPA508G",
+  replacement:[
+    { label:"Cisco IP Phone 8841 (MPP / 3PCC)", sku:"CP-8841-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+
+{
+  id:"ph_spa509g",
+  type:"PHONE",
+  legacyLabel:"Cisco SPA509G",
+  legacySku:"SPA509G",
+  replacement:[
+    { label:"Cisco IP Phone 8841 (MPP / 3PCC)", sku:"CP-8841-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+  ],
+  tags:["SmallBusiness","Previous Gen"],
+  urgency:"high"
+},
+
 {
   id:"ph_spa512g",
   type:"PHONE",
   legacyLabel:"Cisco SPA512G",
   legacySku:"SPA512G",
   replacement:[
-    { label:"Cisco IP Phone 7811 (MPP / 3PCC)", sku:"CP-7811-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+    { label:"Cisco IP Phone 6851 (MPP / 3PCC)", sku:"CP-6851-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
   ],
   tags:["SmallBusiness","Previous Gen"],
   urgency:"high"
 },
+
 {
   id:"ph_spa525g",
   type:"PHONE",
@@ -732,7 +759,7 @@ phones: [
   legacyLabel:"Cisco SPA525G2",
   legacySku:"SPA525G2",
   replacement:[
-    { label:"Cisco IP Phone 8861 (MPP / 3PCC)", sku:"CP-8861-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
+    { label:"Cisco IP Phone 6871 (MPP / 3PCC)", sku:"CP-6871-3PCC-K9=", confidence:"high", note:"Direct Cisco-documented replacement." }
   ],
   tags:["SmallBusiness","Previous Gen","Wireless"],
   urgency:"high"
@@ -743,7 +770,7 @@ phones: [
     id:"ph_8865",
     type:"PHONE",
     legacyLabel:"Cisco IP Phone 8865",
-    legacySku:"(EoS)",
+    legacySku:"CP-8865-K9",
     replacement:[
       {
 	label:"Cisco IP Phone 8875", sku:"CP-8875-K9=", confidence:"high", note:"Video-capable enterprise desk phone."
@@ -758,7 +785,7 @@ phones: [
     id:"ph_8831",
     type:"PHONE",
     legacyLabel:"Cisco Unified IP Conference Phone 8831",
-    legacySku:"(EoS)",
+    legacySku:"CP-8831-K9=",
     replacement:[
       {
         label:"Cisco IP Conference Phone 8832",
@@ -775,7 +802,7 @@ phones: [
     id:"ph_8821",
     type:"PHONE",
     legacyLabel:"Cisco Wireless IP Phone 8821",
-    legacySku:"(EoS)",
+    legacySku:"CP-8821-K9",
     replacement:[
       {
         label:"Cisco Wireless Phone 840",
@@ -824,11 +851,11 @@ phones: [
     id:"ph_8821ex",
     type:"PHONE",
     legacyLabel:"Cisco Wireless IP Phone 8821-EX",
-    legacySku:"(EoS)",
+    legacySku:"CP-8821-EX-K9",
     replacement:[
       {
-        label:"Cisco Wireless Phone 840",
-        sku:"CP-840-K9=",
+        label:"Cisco Wireless Phone 860",
+        sku:"CP-860-K9=",
         confidence:"med",
         note:"Validate hazardous/ATEX compliance requirements."
       },
@@ -848,13 +875,12 @@ phones: [
 
 video: [
 
-
   { id:"vd_room55", type:"VIDEO",
     legacyLabel:"Cisco Webex Room 55",
     legacySku:"CS-ROOM55-K9",
     replacement:[
       { label:"Cisco Room Bar", sku:"CS-BAR-K9", confidence:"med", note:"Small/medium room refresh." },
-      { label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9", confidence:"med", note:"If interactive board experience preferred." }
+      { label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9", confidence:"med", note:"If interactive board experience preferred." },
     ],
     tags:["Room"], urgency:"high"
   },
@@ -864,6 +890,7 @@ video: [
     legacySku:"CS-ROOM55D-K9",
     replacement:[
       { label:"Cisco Room Kit EQ, Quad Cam, First Light", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Dual display capable architecture." },
+ { label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9", confidence:"med", note:"with single screen." },
    ],
     tags:["Room","DualDisplay"], urgency:"high"
   },
@@ -878,13 +905,23 @@ video: [
   },
 
   { id:"vd_sx20", type:"VIDEO",
-    legacyLabel:"Cisco TelePresence SX20 Quick Set",
+    legacyLabel:"Cisco TelePresence SX20 Codec",
     legacySku:"CTS-SX20N-CODEC",
     replacement:[
       { label:"Cisco Codec EQ - Stand Alone", sku:"CS-CODEC-EQ-K9", confidence:"med", note:"Small/medium room modernization." }
     ],
     tags:["Room"], urgency:"high"
   },
+
+{ id:"vd_sx20", type:"VIDEO",
+    legacyLabel:"Cisco TelePresence SX20N ",
+    legacySku:"CTS-SX20N-12X-K9 ",
+    replacement:[
+      { label:"Cisco Room Kit EQ, Quad Cam, First Light", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Med/Large room modernization." }
+    ],
+    tags:["Room"], urgency:"high"
+  },
+
 
   { id:"vd_sx10", type:"VIDEO",
     legacyLabel:"Cisco TelePresence SX10 Quick Set",
@@ -900,6 +937,7 @@ video: [
     legacySku:"CTS-MX800xxx-xxx",
     replacement:[
       { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Standard large room refresh." },
+{ label:"Cisco Board Pro 75 G2", sku:"CS-BRDP75-K9", confidence:"med", note:"with screen" },
           ],
     tags:["TelePresence","Room"], urgency:"high"
   },
@@ -908,7 +946,8 @@ video: [
     legacyLabel:"Cisco TelePresence MX700",
     legacySku:"CTS-MX700xxx-xxx",
     replacement:[
-      { label:"Cisco Room Kit EQX, First Light (White)", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Large room modernization." }
+      { label:"Cisco Room Kit EQX, First Light (White)", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Large room modernization." },
+ 	{ label:"Cisco Board Pro 55 G2", sku:"CS-BRDP55-K9 ", confidence:"med", note:"with screen." },
     ],
     tags:["TelePresence","Room"], urgency:"high"
   },
@@ -946,7 +985,7 @@ video: [
     legacyLabel:"Cisco Room Kit Plus",
     legacySku:"CS-KITPLUS-K9",
     replacement:[
-      { label:"Cisco Room Kit EQ", sku:"CS-KITEQ-K9", confidence:"med", note:"Medium/large room refresh." }
+      { label:"Cisco Room Kit EQ", sku:"CS-KIT-EQ-K9", confidence:"med", note:"Medium/large room refresh." }
     ],
     tags:["Room"], urgency:"high"
   },
@@ -992,7 +1031,8 @@ video: [
     legacyLabel:"Cisco Webex Room 70D G2",
     legacySku:"CS-ROOM70DG2-K9",
     replacement:[
-      { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Large room refresh." }
+      { label:"Cisco Room Kit G2, Quadcam, First Light", sku:"CS-KPRO-Q-L-K9", confidence:"med", note:"Large room refresh." },
+ { label:"Cisco Board Pro 75 G2", sku:"CS-BRDP75-K9", confidence:"med", note:"with single screen" },
     ],
     tags:["Room","LargeRoom"], urgency:"high"
   },
@@ -1220,9 +1260,9 @@ cmcc: [
     id:"cc_ipivr_11x",
     type:"CM/CC",
     legacyLabel:"Cisco Unified IP IVR <12.x",
-    legacySku:"***to be decided***",
+    legacySku:"N/A",
     replacement:[
-      { label:"Customers are encouraged to move to version Unified IP Interactive Voice Response (IVR) 12.5(1)", sku:"N/A", confidence:"low", note:"Modern IVR via Webex Contact Center also can be selected." }
+      { label:"Customers are encouraged to move to version Unified IP Interactive Voice Response (IVR) 12.5(1)", sku:"IPIVR 12.5", confidence:"low", note:"Modern IVR via Webex Contact Center also can be selected." }
     ],
     tags:["IVR","CloudMigration"],
     urgency:"high"
