@@ -1330,23 +1330,50 @@ document.getElementById("searchBox").addEventListener("input", ()=>{
   refreshLegacySelect();
 });
 
+
 function refreshLegacySelect(){
   const select = document.getElementById("legacySelect");
   const query = (document.getElementById("searchBox").value || "").trim().toLowerCase();
-  const list = itemsByCategory[activeCategory] || [];
 
-  const filtered = !query ? list : list.filter(x =>
-    x.legacyLabel.toLowerCase().includes(query) ||
+  // 1) Build source list:
+  // - If query exists => GLOBAL SEARCH across all categories
+  // - Else => keep current behavior (active tab only)
+  let source = [];
+
+  if(query){
+    categories.forEach(c=>{
+      const list = itemsByCategory[c.key] || [];
+      list.forEach(item=>{
+        source.push({ ...item, __catKey: c.key, __catLabel: c.label });
+      });
+    });
+  } else {
+    const list = itemsByCategory[activeCategory] || [];
+    const catLabel = categories.find(c=>c.key===activeCategory)?.label || activeCategory;
+    source = list.map(item=>({ ...item, __catKey: activeCategory, __catLabel: catLabel }));
+  }
+
+  // 2) Filter
+  const filtered = !query ? source : source.filter(x =>
+    (x.legacyLabel || "").toLowerCase().includes(query) ||
     (x.legacySku || "").toLowerCase().includes(query) ||
-    (x.type || "").toLowerCase().includes(query) ||
-    (x.tags || []).join(" ").toLowerCase().includes(query)
+ //   (x.type || "").toLowerCase().includes(query) ||
+ //   (x.tags || []).join(" ").toLowerCase().includes(query) ||
+    (x.__catLabel || "").toLowerCase().includes(query)
   );
-filtered.sort((a, b) => {
-  const labelCompare = a.legacyLabel.localeCompare(b.legacyLabel, undefined, { sensitivity: "base" });
-  if (labelCompare !== 0) return labelCompare;
-  return (a.legacySku || "").localeCompare(b.legacySku || "", undefined, { sensitivity: "base" });
-});
 
+  // 3) Sort (category first if global, then label)
+  filtered.sort((a, b) => {
+    if(query){
+      const c1 = (a.__catLabel || "").localeCompare(b.__catLabel || "", undefined, { sensitivity:"base" });
+      if(c1 !== 0) return c1;
+    }
+    const l = (a.legacyLabel || "").localeCompare(b.legacyLabel || "", undefined, { sensitivity:"base" });
+    if(l !== 0) return l;
+    return (a.legacySku || "").localeCompare(b.legacySku || "", undefined, { sensitivity:"base" });
+  });
+
+  // 4) Render options
   select.innerHTML = "";
   if(filtered.length === 0){
     const opt = document.createElement("option");
@@ -1359,10 +1386,15 @@ filtered.sort((a, b) => {
   filtered.forEach(x=>{
     const opt = document.createElement("option");
     opt.value = x.id;
-    opt.textContent = x.legacyLabel;
+
+    // If global search, show category label in option text
+    const prefix = query ? `[${x.__catLabel}] ` : "";
+    opt.textContent = `${prefix}${x.legacyLabel}`;
+
     select.appendChild(opt);
   });
 }
+
 
 function updateHint(){
   const h = document.getElementById("hint");
@@ -1416,10 +1448,16 @@ function clearAll(){
   document.getElementById("company").value = "";
   document.getElementById("name").value = "";
   document.getElementById("note").value = "";
+
+// NEW: reset search box
+  document.getElementById("searchBox").value = "";
+  refreshLegacySelect();
+
 setPostActionsEnabled(false);
   renderCart();
 setPostActionsEnabled(false);
 }
+
 function getItemById(id){
   for(const k of Object.keys(itemsByCategory)){
     const found = itemsByCategory[k].find(x=>x.id===id);
